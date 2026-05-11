@@ -46,7 +46,7 @@ runs:
   using: composite
   steps:
     - name: git init + fetch + checkout
-      shell: bash
+      shell: sh
       env:
         TOKEN: ${{ inputs.token }}
         REF: ${{ inputs.ref }}
