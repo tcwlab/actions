@@ -22,7 +22,7 @@ Together with `templates/`, this repo forms the **consumer API** of the entire t
 
 ### Status
 
-🔲 **Under construction.** The repo is currently initialized (Forgejo org, `claude-git.sh` wrapper, initial commit `chore: init repo`, and a pattern-anchoring commit `feat: upgrade buildx to 0.33.0 and Docker CLI to 29 (Alpine 3.23)`), but no composite actions are yet implemented. The action structure (`.forgejo/actions/<name>/action.yml`) will be filled as soon as reusable patterns are extracted from consumer repos.
+🟡 **First action live: `checkout-shell`.** Reusable for any tcwlab consumer that runs in a container without Node.js. Released as `v1` / `v1.0.0`. More candidates (`trivy-scan-pr-comment`, `semantic-release-forgejo`, `docker-buildx-publish`, `betterlint-with-pr-comment`) follow as patterns get extracted from consumer repos.
 
 ### Consumers
 
