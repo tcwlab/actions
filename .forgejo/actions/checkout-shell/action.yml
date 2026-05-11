@@ -53,7 +53,7 @@ runs:
         FETCH_DEPTH: ${{ inputs.fetch-depth }}
         FORGEJO_HOST: ${{ inputs.forgejo-host }}
       run: |
-        set -euo pipefail
+        set -eu
         # Many tcwlab images run as non-root users without a writable HOME
         # (Alpine "adduser -S" doesn't create one). Redirect git's global
         # config to a guaranteed-writable temp file instead of $HOME/.gitconfig.
