@@ -6,7 +6,7 @@
 # instead of the JavaScript-based actions/checkout.
 #
 # Consumer usage:
-#   - uses: https://git.mon.k8b.co/tcwlab/actions/.forgejo/actions/checkout-shell@v1
+#   - uses: https://github.com/tcwlab/actions/.forgejo/actions/checkout-shell@v1
 #     with:
 #       token: ${{ secrets.FORGEJO_TOKEN }}
 # ─────────────────────────────────────────────────────────────────────
@@ -54,6 +54,11 @@ runs:
         FORGEJO_HOST: ${{ inputs.forgejo-host }}
       run: |
         set -euo pipefail
+        # Many tcwlab images run as non-root users without a writable HOME
+        # (Alpine "adduser -S" doesn't create one). Redirect git's global
+        # config to a guaranteed-writable temp file instead of $HOME/.gitconfig.
+        export GIT_CONFIG_GLOBAL="${RUNNER_TEMP:-/tmp}/.gitconfig-checkout-shell"
+        : > "$GIT_CONFIG_GLOBAL"
         git config --global init.defaultBranch main
         git config --global --add safe.directory "$PWD"
         git init -q .
