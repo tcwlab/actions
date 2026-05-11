@@ -35,14 +35,14 @@ jobs:
     container:
       image: tcwlab/betterlint:2.17.1
     steps:
-      - uses: https://git.mon.k8b.co/tcwlab/actions/.forgejo/actions/checkout-shell@v1
+      - uses: https://github.com/tcwlab/actions/.forgejo/actions/checkout-shell@v1
       - run: betterlint --dir .
 ```
 
 ### Full history (e.g. for semantic-release)
 
 ```yaml
-- uses: https://git.mon.k8b.co/tcwlab/actions/.forgejo/actions/checkout-shell@v1
+- uses: https://github.com/tcwlab/actions/.forgejo/actions/checkout-shell@v1
   with:
     fetch-depth: "0"
 ```
@@ -50,7 +50,7 @@ jobs:
 ### Custom token (e.g. cross-repo workflows)
 
 ```yaml
-- uses: https://git.mon.k8b.co/tcwlab/actions/.forgejo/actions/checkout-shell@v1
+- uses: https://github.com/tcwlab/actions/.forgejo/actions/checkout-shell@v1
   with:
     token: ${{ secrets.FORGEJO_BOT_TOKEN }}
 ```

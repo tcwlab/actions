@@ -6,7 +6,7 @@
 # instead of the JavaScript-based actions/checkout.
 #
 # Consumer usage:
-#   - uses: https://git.mon.k8b.co/tcwlab/actions/.forgejo/actions/checkout-shell@v1
+#   - uses: https://github.com/tcwlab/actions/.forgejo/actions/checkout-shell@v1
 #     with:
 #       token: ${{ secrets.FORGEJO_TOKEN }}
 # ─────────────────────────────────────────────────────────────────────
