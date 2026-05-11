@@ -1,0 +1,67 @@
+# ─────────────────────────────────────────────────────────────────────
+# tcwlab/actions/checkout-shell — shell-based git checkout
+#
+# Replaces actions/checkout@v4 for jobs whose container image has no
+# Node.js (tcwlab hausregel). Uses git init + git fetch + git checkout
+# instead of the JavaScript-based actions/checkout.
+#
+# Consumer usage:
+#   - uses: https://git.mon.k8b.co/tcwlab/actions/.forgejo/actions/checkout-shell@v1
+#     with:
+#       token: ${{ secrets.FORGEJO_TOKEN }}
+# ─────────────────────────────────────────────────────────────────────
+name: "Checkout (shell-based)"
+description: >
+  Clones the repository into the workspace using plain git commands,
+  without depending on Node.js. Designed for tcwlab container images
+  that intentionally omit Node.js.
+
+inputs:
+  token:
+    description: >
+      Personal access token with repo read scope. Defaults to
+      ${{ github.token }} which Forgejo provides automatically.
+    required: false
+    default: ${{ github.token }}
+  ref:
+    description: >
+      Git ref to check out. Defaults to ${{ github.sha }} for the
+      current event commit. Pass a branch or tag name to deviate.
+    required: false
+    default: ${{ github.sha }}
+  fetch-depth:
+    description: >
+      How many commits to fetch. 1 = shallow (default), 0 = full history
+      (needed for semantic-release and other tools that read tags).
+    required: false
+    default: "1"
+  forgejo-host:
+    description: >
+      Forgejo host (no protocol). Defaults to git.mon.k8b.co. Override
+      for forks or other Forgejo instances.
+    required: false
+    default: "git.mon.k8b.co"
+
+runs:
+  using: composite
+  steps:
+    - name: git init + fetch + checkout
+      shell: bash
+      env:
+        TOKEN: ${{ inputs.token }}
+        REF: ${{ inputs.ref }}
+        FETCH_DEPTH: ${{ inputs.fetch-depth }}
+        FORGEJO_HOST: ${{ inputs.forgejo-host }}
+      run: |
+        set -euo pipefail
+        git config --global init.defaultBranch main
+        git config --global --add safe.directory "$PWD"
+        git init -q .
+        git remote add origin \
+          "https://oauth2:${TOKEN}@${FORGEJO_HOST}/${GITHUB_REPOSITORY}.git"
+        if [ "${FETCH_DEPTH}" = "0" ]; then
+          git fetch -q origin
+        else
+          git fetch -q --depth="${FETCH_DEPTH}" origin "${REF}"
+        fi
+        git checkout -q FETCH_HEAD 2>/dev/null || git checkout -q "${REF}"
