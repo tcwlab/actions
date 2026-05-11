@@ -57,6 +57,10 @@ jobs:
 
 ## Notes
 
+- The action uses POSIX `sh`, not `bash` — so it works in minimal Alpine
+  containers (`tcwlab/trivy`, etc.) that intentionally drop bash from
+  the image. Script body uses only POSIX features plus `set -o pipefail`
+  (supported by busybox `sh` since 1.30 / Alpine 3.11+).
 - The action sets `safe.directory` for the current `$PWD` to silence
   newer git's ownership-mismatch error in container-mounted workspaces.
 - `fetch-depth: 1` is the default for speed. Set `0` if your subsequent
